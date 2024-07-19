@@ -1,0 +1,68 @@
+class SGTree {
+    int[] seg;
+    int n;
+    public SGTree(int[] arr) {
+        n = arr.length;
+
+        // nums = new int[n];
+        seg = new int[4*n];
+        helper(0,n-1,0,arr);
+    }
+    public int build(int i,int j,int index,int[] nums)
+    {
+        if(i==j)
+        {
+            seg[index]=nums[i];
+        }
+        else
+        {
+            int mid = (i+j)/2;
+            int left = build(i,mid,2*index+1,nums);
+            int right =build(mid+1,j,2*index+2,nums);
+
+            seg[index]=left+right;
+        }
+        return seg[index];
+    }
+    
+    public void update(int index, int val) {
+        update(index,0,n-1,val,0);
+    }
+    public int update(int k,int l,int r,int val,int index)
+    {
+        if(l==r)
+        {
+            return seg[index]=val;
+        }
+        int mid = (l+r)/2;
+
+        if(k<=mid) update(k,l,mid,val,2*index+1);
+        else update(k,mid+1,r,val,2*index+2);
+
+        return seg[index] = seg[2*index+1]+seg[2*index+2];
+    }
+    
+    public int sumRange(int left, int right) {
+        return sumRange(left,right,0,n-1,0);
+    }
+    public int sumRange(int l,int r,int i,int j,int index)
+    {
+        if(l>j || r<i) return 0;
+
+        if(l<=i && r>=j) return seg[index];
+
+        int mid = (i+j)/2;
+
+        int left = sumRange(l,r,i,mid,2*index+1);
+        int right = sumRange(l,r,mid+1,j,2*index+2);
+
+        return left+right;
+    }
+}
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * obj.update(index,val);
+ * int param_2 = obj.sumRange(left,right);
+ */
