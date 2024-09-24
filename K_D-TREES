@@ -1,0 +1,33 @@
+import java.util.*;
+
+class k_dtrees
+{
+    class Node
+    {
+        int[] arr;
+        Node left;
+        Node right;
+
+        public Node(int[] arr)
+        {
+            this.arr = arr;
+        }
+    }
+
+    public Node insert(Node root, int[] point, int depth)
+    {
+        if (root == null) return new Node(point);
+
+        int cd = depth % 2;
+
+        if (point[cd] < root.arr[cd]) root.left = insert(root.left, point, depth + 1);
+        else root.right = insert(root.right, point, depth + 1);
+
+        return root;
+    }
+
+    public Node insert(Node root, int[] point)
+    {
+        return insert(root, point, 0);
+    }
+}
